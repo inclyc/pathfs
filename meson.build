@@ -10,6 +10,7 @@ libpathfs_inc = include_directories('include')
 libpathfs_lib = library('pathfs'
 , [ 'lib/utils.cpp' ]
 , include_directories: libpathfs_inc
+, install: true
 )
 
 libpathfs = declare_dependency(link_with: libpathfs_lib,
@@ -17,4 +18,4 @@ libpathfs = declare_dependency(link_with: libpathfs_lib,
 
 
 
-executable('pathfs', ['pathfs.cpp'], dependencies: [ fuse3, libpathfs ])
+executable('pathfs', ['pathfs.cpp'], dependencies: [ fuse3, libpathfs ], install: true)
