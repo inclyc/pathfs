@@ -10,20 +10,16 @@
       with pkgs;
       let
         devInputs = [ clang-tools ];
-        nativeBuildInputs = [
-          meson
-          ninja
-          cmake
-          pkg-config
-        ];
-        buildInputs = [
-          fuse3
-        ];
+        pathfs = pkgs.callPackage ./default.nix { };
+        inherit (pathfs) nativeBuildInputs buildInputs;
       in
       {
         devShells.default = mkShell {
           nativeBuildInputs = devInputs ++ nativeBuildInputs;
           inherit buildInputs;
+        };
+        packages = {
+          inherit pathfs;
         };
       };
     systems = [ "x86_64-linux" ];
