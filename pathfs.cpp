@@ -8,15 +8,10 @@
 
 #include <unistd.h>
 
-#include <fstream>
-
 #define FUSE_USE_VERSION 31
 #include <fuse.h>
-
-#include <sstream>
 #include <string>
 #include <string_view>
-#include <vector>
 
 namespace pathfs {
 
