@@ -21,6 +21,12 @@
         packages = {
           inherit pathfs;
         };
+        checks = {
+          integration-tests = import ./nixos-test.nix {
+            makeTest = import (inputs.nixpkgs + "/nixos/tests/make-test-python.nix");
+            inherit pkgs;
+          };
+        };
       };
     systems = [ "x86_64-linux" ];
   };

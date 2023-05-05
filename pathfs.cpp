@@ -74,5 +74,14 @@ static const struct fuse_operations operations = {
 } // namespace pathfs
 
 int main(int argc, char *argv[]) {
+  if (argc > 2) {
+    pathfs::envName = argv[1];
+    // Consume argv[1] as "envName" (mount device), feed the reset to
+    // "fuse_main"
+    for (int i = 1; i < argc - 1; i++) {
+      argv[i] = argv[i + 1];
+    }
+    argc -= 1;
+  }
   return fuse_main(argc, argv, &pathfs::operations, NULL);
 }
