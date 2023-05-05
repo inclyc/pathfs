@@ -11,6 +11,11 @@ let
     #!/usr/bin/bash
     echo "OK"
   '';
+
+  shShebang = pkgs.writeScript "sh-shebang" ''
+    #!/usr/bin/sh
+    echo "OK"
+  '';
 in
 makeTest
 {
@@ -21,22 +26,23 @@ makeTest
   });
   testScript = ''
     machine.start()
-    # machine.wait_until_succeeds("mountpoint -q /usr/bin/")
-    # machine.succeed(
-    #     "PATH=${pkgs.coreutils}/bin /usr/bin/cp --version",
-    #     # no stat
-    #     "! test -e /usr/bin/cp",
-    #     "! /usr/bin/hello",
-    #     "PATH=${pkgs.hello}/bin /usr/bin/hello",
-    # )
-
+    machine.wait_until_succeeds("mountpoint -q /usr/bin/")
+    machine.succeed(
+        "PATH=${pkgs.coreutils}/bin /usr/bin/cp --version",
+        # we have stat
+        "PATH=${pkgs.coreutils}/bin test -e /usr/bin/cp",
+        "! /usr/bin/hello",
+        # "PATH=${pkgs.hello}/bin /usr/bin/hello",
+    )
     # out = machine.succeed("PATH=${pkgs.python3}/bin ${pythonShebang}")
     # print(out)
     # assert out == "OK\n"
 
-    # out = machine.succeed("PATH=${pkgs.bash}/bin ${bashShebang}")
-    # print(out)
-    # assert out == "OK\n"
+    out = machine.succeed("PATH=${pkgs.bash}/bin ${bashShebang}")
+    assert out == "OK\n"
+
+    out = machine.succeed("PATH=${pkgs.bash}/bin ${shShebang}")
+    assert out == "OK\n"
   '';
 
   meta = {

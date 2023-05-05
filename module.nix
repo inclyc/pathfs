@@ -21,7 +21,13 @@ in
         "/usr/bin" = {
           device = cfg.env;
           fsType = "fuse.pathfs";
-          options = [ "defaults" ];
+          options = [
+            "fallback=${pkgs.runCommand "fallback-path" {} (''
+          mkdir -p $out
+          ln -s ${config.environment.usrbinenv} $out/env
+          ln -s ${config.environment.binsh} $out/sh
+        '')}"
+          ];
         };
         "/bin" = {
           device = "/usr/bin";
